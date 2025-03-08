@@ -2,6 +2,7 @@
 
 Randomart implementation using Symbolic Regression in C 
 
+*Heavily inspired (but not based of!) by ![Tsoding's randomart implementation](https://github.com/tsoding/randomart/tree/main).*
 
 ![image](https://github.com/user-attachments/assets/49a2cb30-2038-4629-8038-e10dd43eee96)
 
@@ -45,4 +46,6 @@ $ feh image.ppm
 ![image](https://github.com/user-attachments/assets/87d8f525-a459-4a22-8803-047818af324f)
 ![image](https://github.com/user-attachments/assets/96f22a17-56f0-4b01-a59d-188dddd3f4c8)
 ![image](https://github.com/user-attachments/assets/8b43617d-6058-4390-9b1a-38b1bd292432)
+
+
 
