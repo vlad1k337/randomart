@@ -1,7 +1,7 @@
 CC = cc
 
 CFLAGS   = -Wall -Wextra -Wpedantic 
-CPPFLAGS = -MMD -Iinclude/ 
+CPPFLAGS = -Iinclude/ 
 LDFLAGS  = -lm
 
 SRCDIR = src
