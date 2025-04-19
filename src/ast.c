@@ -219,12 +219,12 @@ double node_parse(Node* root)
 
 		case DIV:
 		{
-			return node_parse(root->left) / (node_parse(root->right) + 0.0001);
+			return node_parse(root->left) / (node_parse(root->right) + 0.001);
 		}
 
 		case MOD:
 		{
-			return fmod(node_parse(root->left), node_parse(root->right) + 0.0001);
+			return fmod(node_parse(root->left), node_parse(root->right) + 0.001);
 		}
 
 		case SIN:
@@ -249,7 +249,7 @@ double node_parse(Node* root)
 
 		case LOGN:
 		{
-			return log(fabs(node_parse(root->child)) + 0.0001);
+			return log(fabs(node_parse(root->child)) + 0.001);
 		}
 
 		default:

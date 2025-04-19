@@ -1,7 +1,10 @@
 CC = cc
 
-CFLAGS   = -Wall -Wextra -Wpedantic 
-CPPFLAGS = -Iinclude/ 
+CFLAGS  = -Wall -Wextra -Wpedantic 
+CFLAGS += -O2
+
+CPPFLAGS = -Iinclude/ -MMD
+
 LDFLAGS  = -lm
 
 SRCDIR = src
@@ -16,7 +19,7 @@ TARGET = a.out
 
 all: $(TARGET)
 
-debug: CFLAGS += -g3 -ggdb -fsanitize=address
+debug: CFLAGS += -g3 -ggdb
 debug: CPPFLAGS += -MMD
 debug: all
 
@@ -30,6 +33,11 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
+
+.PHONY: gem
+gem:
+	./$(TARGET) > image.ppm
+	feh image.ppm
 
 .PHONY: clean
 clean:
