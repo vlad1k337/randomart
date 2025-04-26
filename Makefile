@@ -3,7 +3,7 @@ CC = cc
 CFLAGS  = -Wall -Wextra -Wpedantic 
 CFLAGS += -O2
 
-CPPFLAGS = -Iinclude/ -MMD
+CPPFLAGS = -Iinclude/ 
 
 LDFLAGS  = -lm
 
@@ -37,7 +37,7 @@ $(OBJDIR):
 .PHONY: gem
 gem:
 	./$(TARGET)
-	feh image.jpg
+	mpv --pause image.hdr
 
 .PHONY: clean
 clean:

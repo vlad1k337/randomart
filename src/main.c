@@ -7,24 +7,26 @@
 
 #include "ast.h"
 
-#define IMAGE_NAME "image.jpg"
+#define IMAGE_NAME "image.hdr"
 
-#define MAX_TREE_SIZE 5
+#define MAX_TREE_DEPTH 10
 
-#define COLOR_RES 255
 
-#define CROSSOVER_COUNT 10
+/* From experience, increasing the crossover count usually leads to more interesting, but noisier images.  */ 
+
+#define CROSSOVER_COUNT 100
 
 #define WIDTH  1920
-#define HEIGHT 1368
+#define HEIGHT 1080
 
-static double x, y, t;
+
+static double x, y;
 
 static Node* r;
 static Node* g;
 static Node* b;
 
-static uint32_t image[3 * WIDTH * HEIGHT];
+static float image[3 * WIDTH * HEIGHT];
 
 double* get_var_random()
 {
@@ -72,26 +74,24 @@ void crossover_random()
 
 void build_trees()
 {
-    r = node_base_create_random(&x, "uv.x");	
-	g = node_base_create_random(&t, "iTime");	
-	b = node_base_create_random(&y, "uv.y");	
+    r = node_base_create_random(&x, "x");	
+	g = node_base_create_random(&y, "y");	
+	b = node_base_create_random(&x, "x");	
 
-	for(int i = 0; i < random() % MAX_TREE_SIZE + 2; ++i)
+	for(int i = 0; i < random() % MAX_TREE_DEPTH + 1; ++i)
 	{
-		node_expand(&r, &t, "iTime");
-		node_expand(&r, &y, "uv.y");
+		node_expand(&r, &x, "x");
+		node_expand(&r, &y, "y");
 	}
 
-	for(int i = 0; i < random() % MAX_TREE_SIZE + 2; ++i)
+	for(int i = 0; i < random() % MAX_TREE_DEPTH + 1; ++i)
 	{
-		node_expand(&g, &y, "uv.y");
-		node_expand(&g, &x, "uv.x");
+		node_expand(&g, &y, "y");
 	}
 
-	for(int i = 0; i < random() % MAX_TREE_SIZE + 2; ++i)
+	for(int i = 0; i < random() % MAX_TREE_DEPTH + 1; ++i)
 	{
-		node_expand(&b, &x, "uv.x");
-		node_expand(&b, &t, "iTime");
+		node_expand(&b, &x, "x");
 	}
 
 	for(int i = 0; i < CROSSOVER_COUNT; ++i)
@@ -113,44 +113,23 @@ int main()
 
     build_trees();	
 
-    puts("void mainImage( out vec4 fragColor, in vec2 fragCoord )");
-    puts("{");
-    puts("vec2 uv = fragCoord;");
-    puts("vec3 col;");
-
-    printf("col.r = abs(");
-    node_print(r);
-    puts(");\n");
-
-    printf("col.g = abs(");
-    node_print(g);
-    puts(");\n");
-
-    printf("col.b = abs(");
-    node_print(b);
-    puts(");\n");
-
-    puts("fragColor = vec4(col, 1.0);");
-    puts("}");
-
     uint32_t index = 0;
 	for(y = -HEIGHT / 2; y < HEIGHT / 2; y += 1.0)
 	{
 		for(x = -WIDTH / 2; x < WIDTH / 2; x += 1.0)
 		{
-            /* Take sine to ensure values are in [-1, 1] range. Feel free to use any other function */
+            /* You may additionaly choose to normalize color values by applying sine/cosine */
 
-            image[index++] = fabs(COLOR_RES * sin(node_parse(r)));
-            image[index++] = fabs(COLOR_RES * sin(node_parse(g))); 
-            image[index++] = fabs(COLOR_RES * sin(node_parse(b)));
+            image[index++] = fabs(node_parse(r));
+            image[index++] = fabs(node_parse(g)); 
+            image[index++] = fabs(node_parse(b));
 		}
 	}
 
 
     clean_trees();	
 
-    stbi_write_jpg(IMAGE_NAME, WIDTH, HEIGHT, 3, image, 100); 
-
+    stbi_write_hdr(IMAGE_NAME, WIDTH, HEIGHT, 3, image); 
 
 	return 0;
 }
