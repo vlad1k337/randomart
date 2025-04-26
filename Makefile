@@ -36,8 +36,8 @@ $(OBJDIR):
 
 .PHONY: gem
 gem:
-	./$(TARGET) > image.ppm
-	feh image.ppm
+	./$(TARGET)
+	feh image.jpg
 
 .PHONY: clean
 clean:

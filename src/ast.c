@@ -17,7 +17,7 @@ Node* node_const_create(double value)
 	return new_node;
 }
 
-Node* node_var_create(double* variable)
+Node* node_var_create(double* variable, char* variable_name)
 {
 	Node* new_node = malloc(sizeof *new_node);
 	assert(new_node != NULL);
@@ -26,6 +26,7 @@ Node* node_var_create(double* variable)
 	new_node->type = VAR;
 
 	new_node->variable = variable;
+    new_node->var_name = variable_name;
 
 	return new_node;
 }
@@ -57,7 +58,7 @@ Node* node_binop_create(node_type type)
 	return new_node;
 }
 
-Node* node_base_create_random(double* variable)
+Node* node_base_create_random(double* variable, char* variable_name)
 {
 	Node* new_base_node = NULL;
 	int rand_op_type = random() & 1;
@@ -65,8 +66,8 @@ Node* node_base_create_random(double* variable)
 	{
 		new_base_node = node_binop_create(get_binop_random());
 
-		new_base_node->left = node_var_create(variable);
-		new_base_node->right = node_const_create(random()/RAND_MAX);
+		new_base_node->left = node_var_create(variable, variable_name);
+		new_base_node->right = node_const_create((double)random()/RAND_MAX);
 
 		return new_base_node;
 	}
@@ -75,7 +76,7 @@ Node* node_base_create_random(double* variable)
 	{
 		new_base_node = node_unop_create(get_unop_random());
 
-		new_base_node->child = node_var_create(variable);
+		new_base_node->child = node_var_create(variable, variable_name);
 
 		return new_base_node;
 	}
@@ -166,24 +167,24 @@ void node_crossover(Node** a, Node** b)
 	*random_b = temp;
 }
 
-void node_expand(Node** root, double* variable)
+void node_expand(Node** root, double* variable, char* variable_name)
 {
 	switch((*root)->operation)
 	{
 		case VALUE:
 		{
 			node_free(*root);
-			*root = node_base_create_random(variable);
+			*root = node_base_create_random(variable, variable_name);
 			return;
 		}
 
 		case UNARY_OP:
-			node_expand(&(*root)->child, variable);
+			node_expand(&(*root)->child, variable, variable_name);
 			return;
 
 		case BIN_OP:
-			node_expand(&(*root)->left, variable);
-			node_expand(&(*root)->right, variable);
+			node_expand(&(*root)->left, variable, variable_name);
+			node_expand(&(*root)->right, variable, variable_name);
 			return;
 	}
 }
@@ -271,7 +272,7 @@ void node_print(Node* root)
 
 		case VAR:
 		{
-			printf("VAR");
+			printf("%s", root->var_name);
 			return;
 		}
 		
@@ -317,9 +318,9 @@ void node_print(Node* root)
 
 		case MOD:
 		{
-			fputs("(", stdout);
+			fputs("mod(", stdout);
 			node_print(root->left);
-			fputs(" mod ", stdout);
+			fputs(",", stdout);
 			node_print(root->right);
 			fputs(")", stdout);
 			return;
@@ -359,7 +360,7 @@ void node_print(Node* root)
 
 		case LOGN:
 		{
-			fputs("ln(", stdout);
+			fputs("log(", stdout);
 			node_print(root->child);
 			fputs(")", stdout);
 			return;

@@ -20,14 +20,14 @@ typedef enum {
 	COS,
 	TAN,
 	SQRT,
-	LOGN
+	LOGN,
 } node_type;
 
 
 typedef enum {
 	VALUE,
 	BIN_OP,
-	UNARY_OP
+	UNARY_OP,
 } op_type;
 
 
@@ -39,7 +39,7 @@ struct Node {
 
 	union {
 		struct { double value; } ;		
-		struct { double* variable; } ;
+		struct { double* variable; char* var_name; } ;
 		struct { Node* left; Node* right; } ;		
 		struct { Node* child; } ;
 	};
@@ -47,13 +47,16 @@ struct Node {
 
 
 Node* node_const_create(double value);
-Node* node_var_create(double* variable);
+
+Node* node_var_create(double* variable, char* variable_name);
+
 Node* node_unop_create(node_type type);
+
 Node* node_binop_create(node_type type);
 
 
 /* Returns a random unary/binary expression with given variable. */
-Node* node_base_create_random(double* variable);
+Node* node_base_create_random(double* variable, char* variable_name);
 
 
 /* Returns a random subtree of a given tree. Pass count as 0, please. */
@@ -67,7 +70,7 @@ void node_crossover(Node** a, Node** b);
 
 
 /* Expands every tree leaf with random base node */
-void node_expand(Node** root, double* variable);
+void node_expand(Node** root, double* variable, char* variable_name);
 
 
 double node_parse(Node* root);

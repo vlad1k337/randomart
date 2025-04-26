@@ -1,0 +1,36 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-O2",
+      "-Iinclude/",
+      "-c",
+      "-o",
+      "build/ast.o",
+      "src/ast.c"
+    ],
+    "directory": "/home/vladick/cpp/randomart",
+    "file": "/home/vladick/cpp/randomart/src/ast.c",
+    "output": "/home/vladick/cpp/randomart/build/ast.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-O2",
+      "-Iinclude/",
+      "-c",
+      "-o",
+      "build/main.o",
+      "src/main.c"
+    ],
+    "directory": "/home/vladick/cpp/randomart",
+    "file": "/home/vladick/cpp/randomart/src/main.c",
+    "output": "/home/vladick/cpp/randomart/build/main.o"
+  }
+]
